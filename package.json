@@ -1,0 +1,12 @@
+{
+  "name": "qingdao-tech-art-design",
+  "version": "1.0.0",
+  "description": "青岛理工大学艺术与设计学院 - 智绘学院·AI赋能",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": ["art", "design", "ai", "university"],
+  "author": "青岛理工大学艺术与设计学院"
+}

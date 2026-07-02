@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毕业设计展 - 青岛理工大学艺术与设计学院</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: '思源黑体';
+            src: url('zt/SourceHanSansSC-Regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: '思源黑体';
+            src: url('zt/SourceHanSansSC-Bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: '思源黑体';
+            src: url('zt/SourceHanSansSC-Light.otf') format('opentype');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow: hidden;
+        }
+
+        html.loaded {
+            overflow: visible;
+        }
+
+        body {
+            font-family: 'Orbitron', 'Rajdhani', 'Source Han Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            cursor: none;
+        }
+
+        :root {
+            --primary: #00f0ff;
+            --secondary: #ff00ff;
+            --accent: #ff6b35;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-muted: rgba(255, 255, 255, 0.3);
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-text {
+            font-family: 'Source Han Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            color: #00f0ff;
+            letter-spacing: 2px;
+            overflow: hidden;
+            white-space: nowrap;
+            animation: loaderTyping 2s steps(20) forwards;
+        }
+
+        .loader-subtext {
+            font-family: 'Source Han Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 4px;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease 1.5s forwards;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .loader-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00f0ff, #ff00ff);
+            width: 0%;
+            animation: loaderProgress 2s ease-out forwards;
+        }
+
+        @keyframes loaderTyping {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes loaderProgress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(1deg); }
+            50% { transform: translateY(-5px) rotate(0deg); }
+            75% { transform: translateY(-15px) rotate(-1deg); }
+        }
+
+        @keyframes floatGlow {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 0.15;
+            }
+            25% { 
+                transform: translate(20px, -10px) scale(1.1);
+                opacity: 0.2;
+            }
+            50% { 
+                transform: translate(10px, -20px) scale(1);
+                opacity: 0.15;
+            }
+            75% { 
+                transform: translate(-10px, -10px) scale(1.05);
+                opacity: 0.18;
+            }
+        }
+
+        @keyframes clickRipple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        @keyframes buttonPress {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .click-effect {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary) 0%, var(--secondary) 50%, transparent 70%);
+            pointer-events: none;
+            z-index: 9999;
+            animation: clickRipple 0.6s ease-out forwards;
+        }
+
+        .btn {
+            position: relative;
+            padding: 1rem 2rem;
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            cursor: none;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 8px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn:hover::before { left: 100%; }
+
+        .btn:active {
+            animation: buttonPress 0.2s ease-out;
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.6);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+        }
+
+        .btn-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 240, 255, 0.4);
+            transform: scale(0);
+            animation: btnRipple 0.6s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes btnRipple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        .slide-in-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        .custom-cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-hover {
+            transform: scale(2);
+            border-color: var(--secondary);
+        }
+
+        .cursor-hover::after {
+            background: var(--secondary);
+        }
+
+        nav {
+            position: fixed;
+            top: 50%;
+            left: 2rem;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 100;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 40px rgba(0, 240, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            text-decoration: none;
+            text-align: center;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            padding: 0.5rem 0.75rem;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(0, 240, 255, 0.1);
+            transform: translateX(5px);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+            background: rgba(0, 240, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(0, 240, 255, 0.08) 0%, transparent 60%);
+        }
+
+        #heroCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .hero-subtitle {
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: normal;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease 0.7s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-container {
+            padding: 4rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 8rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: normal;
+            letter-spacing: -0.03em;
+            margin-bottom: 6rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.7rem 1.8rem;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 25px;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #0a0a0a;
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .work-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: none;
+        }
+
+        .work-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+            transform: translateY(-8px);
+        }
+
+        .work-image-wrapper {
+            position: relative;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+        }
+
+        .work-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .work-card:hover .work-image-wrapper img {
+            transform: scale(1.1);
+        }
+
+        .work-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .work-card:hover .work-overlay {
+            opacity: 1;
+        }
+
+        .work-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.4rem 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            backdrop-filter: blur(10px);
+        }
+
+        .work-content {
+            padding: 1.8rem;
+        }
+
+        .work-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            font-weight: normal;
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .work-card:hover .work-title {
+            color: var(--primary);
+        }
+
+        .work-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 1.2rem;
+        }
+
+        .work-tools {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .tool-tag {
+            padding: 0.4rem 1rem;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            padding: 4rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            margin-bottom: 8rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: normal;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1000;
+        }
+
+        .scroll-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.1s ease;
+        }
+
+        footer {
+            padding: 6rem 4rem 3rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            list-style: none;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 1024px) {
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .mobile-nav {
+                display: block;
+            }
+
+            .hero {
+                padding: 2rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2.5rem, 8vw, 4rem);
+            }
+
+            .page-container {
+                padding: 2rem;
+            }
+
+            .works-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+            }
+
+            footer {
+                padding: 4rem 2rem 8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .work-content {
+                padding: 1.2rem;
+            }
+
+            .work-title {
+                font-size: 1.1rem;
+            }
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1rem 1.5rem;
+        }
+
+        .mobile-nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.8rem;
+            border-radius: 12px;
+        }
+
+        .mobile-nav-item:hover,
+        .mobile-nav-item.active {
+            color: var(--primary);
+            background: rgba(0, 240, 255, 0.1);
+        }
+
+        .mobile-nav-item svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .mobile-nav-item span {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .blur-overlay {
+            display: none;
+        }
+
+        .mouse-blur {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mouse-blur::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 50%;
+            mask: radial-gradient(circle, black 40%, transparent 70%);
+            -webkit-mask: radial-gradient(circle, black 40%, transparent 70%);
+        }
+
+        .mouse-blur.active {
+            opacity: 1;
+        }
+
+        body:hover .mouse-blur {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="blur-overlay" id="blurOverlay"></div>
+    <div class="mouse-blur" id="mouseBlur"></div>
+
+    <div class="loader" id="loader">
+        <div class="loader-text">GRADUATION EXHIBITION</div>
+        <div class="loader-subtext">毕业设计展</div>
+        <div class="loader-bar">
+            <div class="loader-bar-fill"></div>
+        </div>
+    </div>
+
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="scroll-progress">
+        <div class="scroll-progress-bar" id="progressBar"></div>
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">← 返回首页</a>
+    </nav>
+
+    <nav class="mobile-nav">
+        <ul class="mobile-nav-items">
+            <li><a href="index.html" class="mobile-nav-item">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span>首页</span>
+            </a></li>
+            <li><a href="环境设计专业.html" class="mobile-nav-item">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-4v-4h4v4zm0-6h-4V7h4v4z"/></svg>
+                <span>环境设计</span>
+            </a></li>
+            <li><a href="#" class="mobile-nav-item active">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                <span>毕业展</span>
+            </a></li>
+            <li><a href="传统工具美学馆.html" class="mobile-nav-item">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                <span>美学馆</span>
+            </a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <canvas id="heroCanvas"></canvas>
+        <div class="hero-content">
+            <p class="hero-subtitle">Graduation Exhibition</p>
+            <h1 class="hero-title"><span>毕业设计展</span></h1>
+            <p class="hero-desc">汇聚优秀毕业作品，展现创新设计成果，连接学术与产业</p>
+        </div>
+    </section>
+
+    <div class="page-container">
+        <section class="section">
+            <div class="stats-section">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="100">0</div>
+                    <div class="stat-label">参展作品</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="50">0</div>
+                    <div class="stat-label">参与学生</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="10">0</div>
+                    <div class="stat-label">专业方向</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="5">0</div>
+                    <div class="stat-label">展览场地</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">作品展示</h2>
+            
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">全部</button>
+                <button class="filter-tab" data-filter="architecture">建筑设计</button>
+                <button class="filter-tab" data-filter="interior">室内设计</button>
+                <button class="filter-tab" data-filter="landscape">景观设计</button>
+                <button class="filter-tab" data-filter="ai">AI设计</button>
+            </div>
+
+            <div class="works-grid">
+                <div class="work-card" data-category="architecture">
+                    <div class="work-image-wrapper">
+                        <img src="images/智启新程设计无界毕业展.jpg" alt="智启新程设计无界毕业展">
+                        <div class="work-overlay"></div>
+                        <span class="work-badge">毕业展</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">智启新程 · 设计无界</h3>
+                        <p class="work-desc">2023级艺术硕士毕业设计作品展，涵盖环境设计、产品设计、传统文化与文创设计三大方向33件作品</p>
+                        <div class="work-tools">
+                            <span class="tool-tag">环境设计</span>
+                            <span class="tool-tag">产品设计</span>
+                            <span class="tool-tag">文创设计</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="work-card" data-category="landscape">
+                    <div class="work-image-wrapper">
+                        <img src="images/植觉万象课程成果展.jpg" alt="植觉万象课程成果展">
+                        <div class="work-overlay"></div>
+                        <span class="work-badge">景观设计</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">植觉万象 · 心理疗愈主题展</h3>
+                        <p class="work-desc">环境设计专业《植物造景》课程32件学生原创作品，融合园艺疗愈与空间美学</p>
+                        <div class="work-tools">
+                            <span class="tool-tag">植物造景</span>
+                            <span class="tool-tag">园艺疗愈</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="work-card" data-category="landscape">
+                    <div class="work-image-wrapper">
+                        <img src="images/植物造景课程作品.jpg" alt="植物造景课程作品">
+                        <div class="work-overlay"></div>
+                        <span class="work-badge">景观设计</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">静谧·生机·共生</h3>
+                        <p class="work-desc">植物造景课程三大主题板块作品：苔藓蕨类造景、观叶植物布局、自然材料共生</p>
+                        <div class="work-tools">
+                            <span class="tool-tag">微景观</span>
+                            <span class="tool-tag">生态缸</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="work-card" data-category="architecture">
+                    <div class="work-image-wrapper">
+                        <img src="images/匠心筑境课程作品展.jpg" alt="匠心筑境课程作品展">
+                        <div class="work-overlay"></div>
+                        <span class="work-badge">建筑设计</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">匠心筑境 · 传承创未来</h3>
+                        <p class="work-desc">《园林景观建筑》与《空间模型制作》课程优秀作品展，展现中国建筑智慧的当代诠释</p>
+                        <div class="work-tools">
+                            <span class="tool-tag">园林建筑</span>
+                            <span class="tool-tag">模型制作</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="work-card" data-category="ai">
+                    <div class="work-image-wrapper">
+                        <img src="images/心理疗愈主题展览.jpg" alt="心理疗愈主题展览">
+                        <div class="work-overlay"></div>
+                        <span class="work-badge">AI设计</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">艺术疗愈 · 五感体验空间</h3>
+                        <p class="work-desc">融合视觉、嗅觉、触觉多维度体验的疗愈空间设计，探索艺术与心理的深层联结</p>
+                        <div class="work-tools">
+                            <span class="tool-tag">空间设计</span>
+                            <span class="tool-tag">艺术疗愈</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="work-card" data-category="interior">
+                    <div class="work-image-wrapper">
+                        <img src="images/植物造景互动工作坊.jpg" alt="植物造景互动工作坊">
+                        <div class="work-overlay"></div>
+                        <span class="work-badge">室内设计</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">一叶一签 · 自然材料创作</h3>
+                        <p class="work-desc">运用干花、叶片等自然材料进行拼贴构图，锻炼材料组织与空间构图能力</p>
+                        <div class="work-tools">
+                            <span class="tool-tag">材料创作</span>
+                            <span class="tool-tag">拼贴艺术</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="work-card" data-category="landscape">
+                    <div class="work-image-wrapper">
+                        <img src="images/园艺疗愈主题作品.jpg" alt="园艺疗愈主题作品">
+                        <div class="work-overlay"></div>
+                        <span class="work-badge">景观设计</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">我的情绪花束</h3>
+                        <p class="work-desc">根据情绪自由选材搭配花材，将植物配置原理转化为个性化设计表达</p>
+                        <div class="work-tools">
+                            <span class="tool-tag">花艺设计</span>
+                            <span class="tool-tag">情绪设计</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="work-card" data-category="architecture">
+                    <div class="work-image-wrapper">
+                        <img src="images/园林景观建筑课程作品.jpg" alt="园林景观建筑课程作品">
+                        <div class="work-overlay"></div>
+                        <span class="work-badge">建筑设计</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">中国建筑故事 · 场景叙事</h3>
+                        <p class="work-desc">通过"跟着徐霞客去采风""样式雷""丝绸之路中国行"等主题，诠释传统建筑文化</p>
+                        <div class="work-tools">
+                            <span class="tool-tag">场景叙事</span>
+                            <span class="tool-tag">文化传承</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">青理艺设</div>
+            <ul class="footer-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="环境设计专业.html">环境设计</a></li>
+                <li><a href="毕业设计展.html">毕业展</a></li>
+                <li><a href="传统工具美学馆.html">美学馆</a></li>
+            </ul>
+            <p class="footer-copyright">&copy; 2026 青岛理工大学艺术与设计学院</p>
+        </div>
+    </footer>
+
+    <script>
+        const loader = document.getElementById('loader');
+        const mouseBlur = document.getElementById('mouseBlur');
+        
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            document.documentElement.classList.add('loaded');
+        }, 2500);
+
+        document.addEventListener('mousemove', (e) => {
+            mouseBlur.style.left = e.clientX + 'px';
+            mouseBlur.style.top = e.clientY + 'px';
+            mouseBlur.classList.add('active');
+        });
+
+        document.addEventListener('mouseleave', () => {
+            mouseBlur.classList.remove('active');
+        });
+
+        const cursor = document.getElementById('cursor');
+        const cursorHoverElements = document.querySelectorAll('a, button, .work-card');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX - 10}px`;
+            cursor.style.top = `${e.clientY - 10}px`;
+        });
+
+        cursorHoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+        });
+
+        document.addEventListener('click', (e) => {
+            const clickEffect = document.createElement('div');
+            clickEffect.className = 'click-effect';
+            clickEffect.style.left = `${e.clientX - 10}px`;
+            clickEffect.style.top = `${e.clientY - 10}px`;
+            document.body.appendChild(clickEffect);
+            
+            setTimeout(() => {
+                clickEffect.remove();
+            }, 600);
+        });
+
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('btn-ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        const progressBar = document.getElementById('progressBar');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = `${scrollPercent}%`;
+        });
+
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const workCards = document.querySelectorAll('.work-card');
+
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const filter = tab.dataset.filter;
+                
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                workCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            card.style.transition = 'all 0.4s ease';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        card.style.transition = 'all 0.3s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        const statNumbers = document.querySelectorAll('.stat-number');
+        
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    statNumbers.forEach(el => {
+                        const target = parseInt(el.dataset.target);
+                        const duration = 1500;
+                        const steps = 40;
+                        const increment = target / steps;
+                        let current = 0;
+
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                el.textContent = target;
+                                clearInterval(timer);
+                            } else {
+                                el.textContent = Math.floor(current);
+                            }
+                        }, duration / steps);
+                    });
+                    statObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.3 });
+
+        statObserver.observe(document.querySelector('.stats-section'));
+
+        const canvas = document.getElementById('heroCanvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const mouse = { x: -1000, y: -1000 };
+            const particles = [];
+            const particleCount = 150;
+            let mouseTrail = [];
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 4 + 1;
+                    this.speedX = (Math.random() - 0.5) * 0.6;
+                    this.speedY = (Math.random() - 0.5) * 0.6;
+                    this.opacity = Math.random() * 0.6 + 0.1;
+                    this.hue = Math.random() > 0.5 ? 182 : 300;
+                    this.pulse = Math.random() * Math.PI * 2;
+                    this.pulseSpeed = Math.random() * 0.02 + 0.01;
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.pulse += this.pulseSpeed;
+                    this.opacity = 0.2 + Math.sin(this.pulse) * 0.2;
+
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 150) {
+                        const force = (150 - dist) / 150;
+                        this.x -= dx * force * 0.02;
+                        this.y -= dy * force * 0.02;
+                    }
+
+                    if (this.x < -50) this.x = canvas.width + 50;
+                    if (this.x > canvas.width + 50) this.x = -50;
+                    if (this.y < -50) this.y = canvas.height + 50;
+                    if (this.y > canvas.height + 50) this.y = -50;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size + Math.sin(this.pulse) * 0.5, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${this.opacity})`;
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2 + Math.sin(this.pulse) * 1, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${this.opacity * 0.3})`;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+                
+                mouseTrail.push({ x: e.clientX, y: e.clientY, life: 1 });
+                if (mouseTrail.length > 25) mouseTrail.shift();
+            });
+
+            function animate() {
+                ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+
+                particles.forEach((p1, i) => {
+                    particles.slice(i + 1).forEach(p2 => {
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            const opacity = 0.08 * (1 - dist / 120);
+                            ctx.strokeStyle = `rgba(0, 240, 255, ${opacity})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    });
+                });
+
+                // 绘制鼠标拖尾效果
+                if (mouseTrail.length > 1) {
+                    for (let i = 1; i < mouseTrail.length; i++) {
+                        const prev = mouseTrail[i - 1];
+                        const curr = mouseTrail[i];
+                        const progress = i / mouseTrail.length;
+                        
+                        // 绘制连接线
+                        ctx.beginPath();
+                        ctx.moveTo(prev.x, prev.y);
+                        ctx.lineTo(curr.x, curr.y);
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${progress * 0.6})`;
+                        ctx.lineWidth = progress * 4;
+                        ctx.lineCap = 'round';
+                        ctx.stroke();
+                    }
+                    
+                    // 在轨迹点绘制发光效果
+                    mouseTrail.forEach((point, i) => {
+                        const progress = i / mouseTrail.length;
+                        const size = progress * 6;
+                        
+                        // 外发光
+                        const gradient = ctx.createRadialGradient(
+                            point.x, point.y, 0,
+                            point.x, point.y, size * 2
+                        );
+                        gradient.addColorStop(0, `rgba(0, 240, 255, ${progress * 0.5})`);
+                        gradient.addColorStop(0.5, `rgba(0, 240, 255, ${progress * 0.2})`);
+                        gradient.addColorStop(1, 'rgba(0, 240, 255, 0)');
+                        
+                        ctx.beginPath();
+                        ctx.arc(point.x, point.y, size * 2, 0, Math.PI * 2);
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
+                    });
+                }
+                
+                // 更新轨迹点
+                mouseTrail.forEach((point, i) => {
+                    point.life -= 0.02;
+                });
+                mouseTrail = mouseTrail.filter(p => p.life > 0);
+
+                drawPatterns();
+
+                requestAnimationFrame(animate);
+            }
+
+            function drawPatterns() {
+                ctx.save();
+                
+                const time = Date.now() / 1000;
+
+                ctx.strokeStyle = `rgba(0, 240, 255, 0.03)`;
+                ctx.lineWidth = 1;
+
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2 + time * 0.1;
+                    const radius = 150 + Math.sin(time + i) * 30;
+                    
+                    ctx.beginPath();
+                    ctx.arc(centerX + Math.cos(angle) * 200, 
+                            centerY + Math.sin(angle) * 200, 
+                            radius, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                for (let i = 0; i < 3; i++) {
+                    const angle = (i / 3) * Math.PI * 2 + time * 0.05;
+                    const x = centerX + Math.cos(angle) * 300;
+                    const y = centerY + Math.sin(angle) * 300;
+                    
+                    ctx.beginPath();
+                    for (let j = 0; j < 8; j++) {
+                        const px = x + Math.cos((j / 8) * Math.PI * 2 + time) * 40;
+                        const py = y + Math.sin((j / 8) * Math.PI * 2 + time) * 40;
+                        if (j === 0) ctx.moveTo(px, py);
+                        else ctx.lineTo(px, py);
+                    }
+                    ctx.closePath();
+                    ctx.stroke();
+                }
+
+                ctx.beginPath();
+                ctx.moveTo(centerX - 100, centerY);
+                ctx.lineTo(centerX + 100, centerY);
+                ctx.moveTo(centerX, centerY - 100);
+                ctx.lineTo(centerX, centerY + 100);
+                ctx.strokeStyle = `rgba(255, 0, 255, 0.02)`;
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            animate();
+        }
+    </script>
+</body>
+</html>

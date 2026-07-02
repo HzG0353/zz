@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>传统工具美学馆 - 青岛理工大学艺术与设计学院</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: '思源黑体';
+            src: url('zt/SourceHanSansSC-Regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: '思源黑体';
+            src: url('zt/SourceHanSansSC-Bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: '思源黑体';
+            src: url('zt/SourceHanSansSC-Light.otf') format('opentype');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow: hidden;
+        }
+
+        html.loaded {
+            overflow: visible;
+        }
+
+        body {
+            font-family: 'Orbitron', 'Rajdhani', 'Source Han Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            cursor: none;
+        }
+
+        :root {
+            --primary: #00f0ff;
+            --secondary: #ff00ff;
+            --accent: #ff6b35;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-muted: rgba(255, 255, 255, 0.3);
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-text {
+            font-family: 'Source Han Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            color: #00f0ff;
+            letter-spacing: 2px;
+            overflow: hidden;
+            white-space: nowrap;
+            animation: loaderTyping 2s steps(25) forwards;
+        }
+
+        .loader-subtext {
+            font-family: 'Source Han Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 4px;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease 1.5s forwards;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .loader-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00f0ff, #ff00ff);
+            width: 0%;
+            animation: loaderProgress 2s ease-out forwards;
+        }
+
+        @keyframes loaderTyping {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes loaderProgress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(1deg); }
+            50% { transform: translateY(-5px) rotate(0deg); }
+            75% { transform: translateY(-15px) rotate(-1deg); }
+        }
+
+        @keyframes floatGlow {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 0.15;
+            }
+            25% { 
+                transform: translate(20px, -10px) scale(1.1);
+                opacity: 0.2;
+            }
+            50% { 
+                transform: translate(10px, -20px) scale(1);
+                opacity: 0.15;
+            }
+            75% { 
+                transform: translate(-10px, -10px) scale(1.05);
+                opacity: 0.18;
+            }
+        }
+
+        @keyframes clickRipple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        @keyframes buttonPress {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .click-effect {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary) 0%, var(--secondary) 50%, transparent 70%);
+            pointer-events: none;
+            z-index: 9999;
+            animation: clickRipple 0.6s ease-out forwards;
+        }
+
+        .btn {
+            position: relative;
+            padding: 1rem 2rem;
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            cursor: none;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 8px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn:hover::before { left: 100%; }
+
+        .btn:active {
+            animation: buttonPress 0.2s ease-out;
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.6);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+        }
+
+        .btn-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 240, 255, 0.4);
+            transform: scale(0);
+            animation: btnRipple 0.6s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes btnRipple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        .custom-cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-hover {
+            transform: scale(2);
+            border-color: var(--secondary);
+        }
+
+        .cursor-hover::after {
+            background: var(--secondary);
+        }
+
+        nav {
+            position: fixed;
+            top: 50%;
+            left: 2rem;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 100;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 40px rgba(0, 240, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            text-decoration: none;
+            text-align: center;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            padding: 0.5rem 0.75rem;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(0, 240, 255, 0.1);
+            transform: translateX(5px);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+            background: rgba(0, 240, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(0, 240, 255, 0.08) 0%, transparent 60%);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('images/ink_bucket.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: grayscale(30%);
+        }
+
+        #heroCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .hero-subtitle {
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: normal;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease 0.7s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-container {
+            padding: 3rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 10rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            font-weight: normal;
+            letter-spacing: -0.02em;
+            margin-bottom: 5rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+            border-radius: 2px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 1px;
+            background: var(--accent);
+            opacity: 0.6;
+        }
+
+        .logo-showcase {
+            text-align: center;
+            padding: 4rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            margin-bottom: 6rem;
+        }
+
+        .logo-container {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 2rem;
+            background: var(--gradient-ocean);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            box-shadow: 0 0 60px rgba(0, 240, 255, 0.3);
+            animation: logoGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: 0 0 60px rgba(0, 240, 255, 0.3); }
+            50% { box-shadow: 0 0 90px rgba(0, 240, 255, 0.5); }
+        }
+
+        .logo-name {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            font-weight: normal;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-en {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+        }
+
+        .comparison-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 4rem;
+        }
+
+        .comparison-card {
+            display: grid;
+            grid-template-columns: 1fr 0.15fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .comparison-item {
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.35s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-traditional {
+            background: linear-gradient(135deg, rgba(255, 122, 0, 0.08) 0%, transparent 100%);
+            border-color: rgba(255, 122, 0, 0.2);
+        }
+
+        .comparison-digital {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, transparent 100%);
+            border-color: rgba(0, 240, 255, 0.2);
+        }
+
+        .comparison-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+
+        .comparison-traditional .comparison-label {
+            background: rgba(255, 122, 0, 0.15);
+            color: var(--accent);
+        }
+
+        .comparison-digital .comparison-label {
+            background: rgba(0, 240, 255, 0.15);
+            color: var(--primary);
+        }
+
+        .comparison-img-wrapper {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            aspect-ratio: 4/3;
+        }
+
+        .comparison-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .comparison-card:hover .comparison-img {
+            transform: scale(1.05);
+        }
+
+        .comparison-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: normal;
+            margin-bottom: 0.6rem;
+        }
+
+        .comparison-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .arrow-connector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            color: var(--primary);
+            animation: arrowPulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { transform: translateX(0); opacity: 0.6; }
+            50% { transform: translateX(10px); opacity: 1; }
+        }
+
+        .dialogue-section {
+            padding: 4rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+        }
+
+        .dialogue-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .dialogue-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .dialogue-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .dialogue-bubble {
+            flex: 1;
+            padding: 1.8rem;
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.35s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .dialogue-item:nth-child(odd) .dialogue-bubble {
+            background: linear-gradient(135deg, rgba(255, 122, 0, 0.08) 0%, transparent 100%);
+            border-color: rgba(255, 122, 0, 0.2);
+        }
+
+        .dialogue-item:nth-child(even) .dialogue-bubble {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, transparent 100%);
+            border-color: rgba(0, 240, 255, 0.2);
+        }
+
+        .dialogue-bubble:hover {
+            transform: translateY(-3px);
+        }
+
+        .dialogue-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .dialogue-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: 1.15rem;
+            font-weight: normal;
+            margin-bottom: 0.8rem;
+        }
+
+        .dialogue-item:nth-child(odd) .dialogue-title {
+            color: var(--accent);
+        }
+
+        .dialogue-item:nth-child(even) .dialogue-title {
+            color: var(--primary);
+        }
+
+        .dialogue-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .dialogue-vs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            padding: 1rem;
+        }
+
+        .exhibit-categories {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .exhibit-card {
+            padding: 2.5rem 2rem;
+            text-align: center;
+            cursor: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+
+        .exhibit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .exhibit-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .exhibit-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.03) 0%, transparent 60%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.6s ease;
+        }
+
+        .exhibit-card:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .exhibit-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .exhibit-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .exhibit-card:hover .exhibit-icon {
+            transform: scale(1.15) translateY(-5px);
+        }
+
+        .exhibit-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
+        }
+
+        .exhibit-subtitle {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .exhibit-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        .gallery-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 5rem;
+            border-radius: 24px;
+        }
+
+        .gallery-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-height: 700px;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .gallery-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .gallery-container::-webkit-scrollbar-track {
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .gallery-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            aspect-ratio: 3/2;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-12px) scale(1.03);
+            border-color: rgba(0, 240, 255, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.12);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.9));
+            padding: 2rem 1.5rem 1.2rem;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            letter-spacing: 1px;
+        }
+
+        .gallery-category {
+            font-size: 0.78rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .poster-section {
+            padding: 5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+        }
+
+        .poster-carousel {
+            display: flex;
+            gap: 2.5rem;
+            overflow-x: auto;
+            padding: 2rem 1rem;
+            scroll-snap-type: x mandatory;
+        }
+
+        .poster-carousel::-webkit-scrollbar {
+            height: 8px;
+            margin-top: 1rem;
+        }
+
+        .poster-carousel::-webkit-scrollbar-track {
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .poster-carousel::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        .poster-item {
+            flex: 0 0 360px;
+            scroll-snap-align: center;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .poster-item:hover {
+            transform: translateY(-15px);
+            border-color: rgba(0, 240, 255, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .poster-item img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .poster-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .poster-info {
+            padding: 1.8rem;
+            background: rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .poster-title {
+            font-family: '思源黑体', 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .poster-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1000;
+        }
+
+        .scroll-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.1s ease;
+        }
+
+        footer {
+            padding: 6rem 4rem 3rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            list-style: none;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 1200px) {
+            .exhibit-categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .comparison-card {
+                grid-template-columns: 1fr;
+            }
+
+            .arrow-connector {
+                transform: rotate(90deg);
+                padding: 0.5rem 0;
+            }
+
+            .gallery-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .mobile-nav {
+                display: block;
+            }
+
+            .hero {
+                padding: 2rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2.5rem, 8vw, 4rem);
+            }
+
+            .page-container {
+                padding: 1.5rem;
+            }
+
+            .section {
+                margin-bottom: 6rem;
+            }
+
+            .logo-showcase,
+            .comparison-section,
+            .dialogue-section {
+                padding: 1.5rem;
+            }
+
+            .gallery-section,
+            .poster-section {
+                padding: 2rem;
+            }
+
+            .gallery-container {
+                grid-template-columns: 1fr;
+                max-height: none;
+                gap: 1.5rem;
+            }
+
+            .poster-item {
+                flex: 0 0 280px;
+            }
+
+            .poster-item img {
+                height: 350px;
+            }
+
+            footer {
+                padding: 4rem 2rem 8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-container {
+                width: 120px;
+                height: 120px;
+                font-size: 3rem;
+            }
+
+            .dialogue-item,
+            .dialogue-item:nth-child(even) {
+                flex-direction: column;
+            }
+
+            .exhibit-card {
+                padding: 1.5rem;
+            }
+
+            .exhibit-icon {
+                font-size: 3rem;
+            }
+
+            .exhibit-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1rem 1.5rem;
+        }
+
+        .mobile-nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.8rem;
+            border-radius: 12px;
+        }
+
+        .mobile-nav-item:hover,
+        .mobile-nav-item.active {
+            color: var(--primary);
+            background: rgba(0, 240, 255, 0.1);
+        }
+
+        .mobile-nav-item svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .mobile-nav-item span {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .blur-overlay {
+            display: none;
+        }
+
+        .mouse-blur {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mouse-blur::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 50%;
+            mask: radial-gradient(circle, black 40%, transparent 70%);
+            -webkit-mask: radial-gradient(circle, black 40%, transparent 70%);
+        }
+
+        .mouse-blur.active {
+            opacity: 1;
+        }
+
+        body:hover .mouse-blur {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="blur-overlay" id="blurOverlay"></div>
+    <div class="mouse-blur" id="mouseBlur"></div>
+
+    <div class="loader" id="loader">
+        <div class="loader-text">TRADITIONAL TOOLS MUSEUM</div>
+        <div class="loader-subtext">传统工具美学馆</div>
+        <div class="loader-bar">
+            <div class="loader-bar-fill"></div>
+        </div>
+    </div>
+
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="scroll-progress">
+        <div class="scroll-progress-bar" id="progressBar"></div>
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">← 返回首页</a>
+    </nav>
+
+    <nav class="mobile-nav">
+        <ul class="mobile-nav-items">
+            <li><a href="index.html" class="mobile-nav-item">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span>首页</span>
+            </a></li>
+            <li><a href="环境设计专业.html" class="mobile-nav-item">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-4v-4h4v4zm0-6h-4V7h4v4z"/></svg>
+                <span>环境设计</span>
+            </a></li>
+            <li><a href="毕业设计展.html" class="mobile-nav-item">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                <span>毕业展</span>
+            </a></li>
+            <li><a href="#" class="mobile-nav-item active">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                <span>美学馆</span>
+            </a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <canvas id="heroCanvas"></canvas>
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <p class="hero-subtitle">Traditional Tools Museum</p>
+            <h1 class="hero-title"><span>传统工具美学馆</span></h1>
+            <p class="hero-desc">东方水墨与数字解构的融合之美，探索传统工艺美学与AI技术的对话</p>
+        </div>
+    </section>
+
+    <div class="page-container">
+        <section class="logo-showcase">
+            <div class="logo-container">🛠️</div>
+            <h3 class="logo-name">青岛理工大学传统工具美学馆</h3>
+            <p class="logo-en">TRADITIONAL TOOLS AESTHETICS MUSEUM</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">🎨 鲁班尺：传统与数字的对话</h2>
+            <div class="comparison-section">
+                <div class="comparison-card">
+                    <div class="comparison-item comparison-traditional">
+                        <span class="comparison-label">传统工艺</span>
+                        <div class="comparison-img-wrapper">
+                            <img src="./1/墨斗3.jpg" alt="传统鲁班尺" class="comparison-img">
+                        </div>
+                        <h3 class="comparison-title">传统木尺</h3>
+                        <p class="comparison-desc">木质材料，手工刻度，承载千年匠人智慧与传统空间哲学</p>
+                    </div>
+                    <div class="arrow-connector">→</div>
+                    <div class="comparison-item comparison-digital">
+                        <span class="comparison-label">AI数字化</span>
+                        <div class="comparison-img-wrapper">
+                            <img src="images/digital_luban.jpg" 
+                                 alt="数字化鲁班尺" 
+                                 class="comparison-img">
+                        </div>
+                        <h3 class="comparison-title">荧光数字刻度</h3>
+                        <p class="comparison-desc">AI生成的数字刻度，保留传统比例美学，实现智能化设计优化</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">💬 美学探讨</h2>
+            <div class="dialogue-section">
+                <div class="dialogue-container">
+                    <div class="dialogue-item">
+                        <div class="dialogue-bubble">
+                            <div class="dialogue-icon">📐</div>
+                            <h3 class="dialogue-title">传统工具的比例美学</h3>
+                            <p class="dialogue-text">鲁班尺上的"门公尺"刻度蕴含着中国传统的空间哲学，一寸一分都有其特定的文化含义。古代工匠通过长期实践，总结出最适合人居的尺寸比例。</p>
+                        </div>
+                    </div>
+                    <div class="dialogue-vs">⚡ VS ⚡</div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-bubble">
+                            <div class="dialogue-icon">🤖</div>
+                            <h3 class="dialogue-title">AI参数化设计逻辑</h3>
+                            <p class="dialogue-text">现代参数化设计通过算法生成最优空间比例。AI可以学习传统尺度的规律，将其转化为可计算的参数模型，在保持文化韵味的同时实现智能化设计优化。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">📦 展品分类</h2>
+            <div class="exhibit-categories">
+                <div class="exhibit-card">
+                    <div class="exhibit-icon">🧵</div>
+                    <h3 class="exhibit-title">女红心境</h3>
+                    <p class="exhibit-subtitle">NEEDLEWORK</p>
+                    <p class="exhibit-desc">展示传统刺绣、缝纫工具，感受古代女性的匠心巧思与细腻情感</p>
+                </div>
+                <div class="exhibit-card">
+                    <div class="exhibit-icon">🎣</div>
+                    <h3 class="exhibit-title">巧具以渔</h3>
+                    <p class="exhibit-subtitle">FISHING TOOLS</p>
+                    <p class="exhibit-desc">呈现传统渔具制作技艺，探索古人的捕鱼智慧与生态平衡观念</p>
+                </div>
+                <div class="exhibit-card">
+                    <div class="exhibit-icon">📐</div>
+                    <h3 class="exhibit-title">墨定乾坤</h3>
+                    <p class="exhibit-subtitle">INK TOOLS</p>
+                    <p class="exhibit-desc">展示传统木工墨斗等工具，体验匠人精准的测量技艺与匠心精神</p>
+                </div>
+                <div class="exhibit-card">
+                    <div class="exhibit-icon">🏺</div>
+                    <h3 class="exhibit-title">模范生花</h3>
+                    <p class="exhibit-subtitle">MOLDS</p>
+                    <p class="exhibit-desc">呈现各类传统模具，感受复制工艺的独特魅力与文化传承</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="gallery-section">
+                <h3 class="gallery-title">精品藏品展示</h3>
+                <div class="gallery-container">
+                    <div class="gallery-item">
+                        <img src="./1/墨斗1.png" alt="墨斗作品1">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">墨斗·壹</div>
+                            <div class="gallery-category">墨定乾坤</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/墨斗2.png" alt="墨斗作品2">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">墨斗·贰</div>
+                            <div class="gallery-category">墨定乾坤</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/墨斗3.jpg" alt="墨斗作品3">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">墨斗·叁</div>
+                            <div class="gallery-category">墨定乾坤</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/墨斗4.png" alt="墨斗作品4">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">墨斗·肆</div>
+                            <div class="gallery-category">墨定乾坤</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/女红工具1.png" alt="女红工具1">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">女红工具·壹</div>
+                            <div class="gallery-category">女红心境</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/女红工具2.jpg" alt="女红工具2">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">女红工具·贰</div>
+                            <div class="gallery-category">女红心境</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/木雕构建1.jpg" alt="木雕构建1">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">木雕构建·壹</div>
+                            <div class="gallery-category">木雕工艺</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/木雕构建2.jpg" alt="木雕构建2">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">木雕构建·贰</div>
+                            <div class="gallery-category">木雕工艺</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/模具1.png" alt="模具1">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">模具·壹</div>
+                            <div class="gallery-category">模范生花</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/模具2.png" alt="模具2">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">模具·贰</div>
+                            <div class="gallery-category">模范生花</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/水车1.jpg" alt="水车1">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">水车·壹</div>
+                            <div class="gallery-category">水利工具</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./1/渔具1.png" alt="渔具1">
+                        <div class="gallery-overlay">
+                            <div class="gallery-name">渔具·壹</div>
+                            <div class="gallery-category">巧具以渔</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">🎨 传统工具美学海报</h2>
+            <div class="poster-section">
+                <div class="poster-carousel">
+                    <div class="poster-item">
+                        <img src="./2/4609e30d2d66e615580c4fef954762b9.jpg" alt="海报1">
+                        <div class="poster-info">
+                            <div class="poster-title">传统工具美学·壹</div>
+                            <div class="poster-desc">东方水墨与数字解构的融合</div>
+                        </div>
+                    </div>
+                    <div class="poster-item">
+                        <img src="./2/acbfd9d4ad0dd09a51b26abbd089e517.jpg" alt="海报2">
+                        <div class="poster-info">
+                            <div class="poster-title">传统工具美学·贰</div>
+                            <div class="poster-desc">匠心传承与科技创新</div>
+                        </div>
+                    </div>
+                    <div class="poster-item">
+                        <img src="./2/e392d915a442b490db80471dcfd3029a.jpg" alt="海报3">
+                        <div class="poster-info">
+                            <div class="poster-title">传统工具美学·叁</div>
+                            <div class="poster-desc">古韵今风，美学新生</div>
+                        </div>
+                    </div>
+                    <div class="poster-item">
+                        <img src="./2/f6800b4d376312ae712f6e2e4904616d.jpg" alt="海报4">
+                        <div class="poster-info">
+                            <div class="poster-title">传统工具美学·肆</div>
+                            <div class="poster-desc">工艺之美，跨越时空</div>
+                        </div>
+                    </div>
+                    <div class="poster-item">
+                        <img src="./2/fb3bb6eec489b14c8018fa634b4a5bc3.jpg" alt="海报5">
+                        <div class="poster-info">
+                            <div class="poster-title">传统工具美学·伍</div>
+                            <div class="poster-desc">传统与现代的对话</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">青理艺设</div>
+            <ul class="footer-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="环境设计专业.html">环境设计</a></li>
+                <li><a href="毕业设计展.html">毕业展</a></li>
+                <li><a href="传统工具美学馆.html">美学馆</a></li>
+            </ul>
+            <p class="footer-copyright">&copy; 2026 青岛理工大学艺术与设计学院</p>
+        </div>
+    </footer>
+
+    <script>
+        const loader = document.getElementById('loader');
+        const mouseBlur = document.getElementById('mouseBlur');
+        
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            document.documentElement.classList.add('loaded');
+        }, 2500);
+
+        document.addEventListener('mousemove', (e) => {
+            mouseBlur.style.left = e.clientX + 'px';
+            mouseBlur.style.top = e.clientY + 'px';
+            mouseBlur.classList.add('active');
+        });
+
+        document.addEventListener('mouseleave', () => {
+            mouseBlur.classList.remove('active');
+        });
+
+        const cursor = document.getElementById('cursor');
+        const cursorHoverElements = document.querySelectorAll('a, button, .exhibit-card, .gallery-item, .poster-item');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX - 10}px`;
+            cursor.style.top = `${e.clientY - 10}px`;
+        });
+
+        cursorHoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+        });
+
+        const progressBar = document.getElementById('progressBar');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = `${scrollPercent}%`;
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        const canvas = document.getElementById('heroCanvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const mouse = { x: -1000, y: -1000 };
+            const particles = [];
+            const particleCount = 150;
+            let mouseTrail = [];
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 4 + 1;
+                    this.speedX = (Math.random() - 0.5) * 0.6;
+                    this.speedY = (Math.random() - 0.5) * 0.6;
+                    this.opacity = Math.random() * 0.6 + 0.1;
+                    this.hue = Math.random() > 0.5 ? 182 : 300;
+                    this.pulse = Math.random() * Math.PI * 2;
+                    this.pulseSpeed = Math.random() * 0.02 + 0.01;
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.pulse += this.pulseSpeed;
+                    this.opacity = 0.2 + Math.sin(this.pulse) * 0.2;
+
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 150) {
+                        const force = (150 - dist) / 150;
+                        this.x -= dx * force * 0.02;
+                        this.y -= dy * force * 0.02;
+                    }
+
+                    if (this.x < -50) this.x = canvas.width + 50;
+                    if (this.x > canvas.width + 50) this.x = -50;
+                    if (this.y < -50) this.y = canvas.height + 50;
+                    if (this.y > canvas.height + 50) this.y = -50;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size + Math.sin(this.pulse) * 0.5, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${this.opacity})`;
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2 + Math.sin(this.pulse) * 1, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${this.opacity * 0.3})`;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+                
+                mouseTrail.push({ x: e.clientX, y: e.clientY, life: 1 });
+                if (mouseTrail.length > 25) mouseTrail.shift();
+            });
+
+            function animate() {
+                ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+
+                particles.forEach((p1, i) => {
+                    particles.slice(i + 1).forEach(p2 => {
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            const opacity = 0.08 * (1 - dist / 120);
+                            ctx.strokeStyle = `rgba(0, 240, 255, ${opacity})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    });
+                });
+
+                // 绘制鼠标拖尾效果
+                if (mouseTrail.length > 1) {
+                    for (let i = 1; i < mouseTrail.length; i++) {
+                        const prev = mouseTrail[i - 1];
+                        const curr = mouseTrail[i];
+                        const progress = i / mouseTrail.length;
+                        
+                        // 绘制连接线
+                        ctx.beginPath();
+                        ctx.moveTo(prev.x, prev.y);
+                        ctx.lineTo(curr.x, curr.y);
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${progress * 0.6})`;
+                        ctx.lineWidth = progress * 4;
+                        ctx.lineCap = 'round';
+                        ctx.stroke();
+                    }
+                    
+                    // 在轨迹点绘制发光效果
+                    mouseTrail.forEach((point, i) => {
+                        const progress = i / mouseTrail.length;
+                        const size = progress * 6;
+                        
+                        // 外发光
+                        const gradient = ctx.createRadialGradient(
+                            point.x, point.y, 0,
+                            point.x, point.y, size * 2
+                        );
+                        gradient.addColorStop(0, `rgba(0, 240, 255, ${progress * 0.5})`);
+                        gradient.addColorStop(0.5, `rgba(0, 240, 255, ${progress * 0.2})`);
+                        gradient.addColorStop(1, 'rgba(0, 240, 255, 0)');
+                        
+                        ctx.beginPath();
+                        ctx.arc(point.x, point.y, size * 2, 0, Math.PI * 2);
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
+                    });
+                }
+                
+                // 更新轨迹点
+                mouseTrail.forEach((point, i) => {
+                    point.life -= 0.02;
+                });
+                mouseTrail = mouseTrail.filter(p => p.life > 0);
+
+                drawPatterns();
+
+                requestAnimationFrame(animate);
+            }
+
+            function drawPatterns() {
+                ctx.save();
+                
+                const time = Date.now() / 1000;
+
+                ctx.strokeStyle = `rgba(0, 240, 255, 0.03)`;
+                ctx.lineWidth = 1;
+
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2 + time * 0.1;
+                    const radius = 150 + Math.sin(time + i) * 30;
+                    
+                    ctx.beginPath();
+                    ctx.arc(centerX + Math.cos(angle) * 200, 
+                            centerY + Math.sin(angle) * 200, 
+                            radius, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                for (let i = 0; i < 3; i++) {
+                    const angle = (i / 3) * Math.PI * 2 + time * 0.05;
+                    const x = centerX + Math.cos(angle) * 300;
+                    const y = centerY + Math.sin(angle) * 300;
+                    
+                    ctx.beginPath();
+                    for (let j = 0; j < 8; j++) {
+                        const px = x + Math.cos((j / 8) * Math.PI * 2 + time) * 40;
+                        const py = y + Math.sin((j / 8) * Math.PI * 2 + time) * 40;
+                        if (j === 0) ctx.moveTo(px, py);
+                        else ctx.lineTo(px, py);
+                    }
+                    ctx.closePath();
+                    ctx.stroke();
+                }
+
+                ctx.beginPath();
+                ctx.moveTo(centerX - 100, centerY);
+                ctx.lineTo(centerX + 100, centerY);
+                ctx.moveTo(centerX, centerY - 100);
+                ctx.lineTo(centerX, centerY + 100);
+                ctx.strokeStyle = `rgba(255, 0, 255, 0.02)`;
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            animate();
+        }
+    </script>
+</body>
+</html>
